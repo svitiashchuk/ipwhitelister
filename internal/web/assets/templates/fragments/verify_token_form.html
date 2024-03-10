@@ -1,0 +1,6 @@
+<form method="POST" action="/verify-token" hx-post="/verify-token" hx-swap="none" id="verify-token-form">
+    <label for="token">Token</label>
+    <input type="hidden" id="email" name="email" value="{{ .Email }}">
+    <input type="token" id="token" name="token" required>
+    <button type="submit">Verify Token</button>
+</form>

@@ -1,0 +1,56 @@
+{{ define "main" }}
+<section class="container" style="max-width: 1200px; margin: auto;">
+    <h1>User Profile</h1>
+
+    <div class="grid">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                      <th scope="col">Field</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>  
+                  <tbody>
+                    <tr>
+                      <th scope="row">Email</th>
+                      <td>{{ .Email }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Last IP:</th>
+                        <td>{{ .LastAssociatedIP }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Pending IP:</th>
+                        <td>{{ if eq .PendingIP ""}}
+                            N/A
+                        {{ else  }}
+                            {{ .PendingIP }}
+                        {{ end }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <article>
+                <label for="current_ip">Current IP</label>
+                {{ if eq .CurrentIP .LastAssociatedIP }}
+                <fieldset role="group">
+                    <input disabled type="text" id="current_ip" name="current_ip" value="{{ .CurrentIP }}" aria-invalid="false"/>
+                    <button disabled>Refresh</button>
+                </fieldset>
+                <small id="valid-helper">Your IP-address is in sync!</small>
+                {{ else }}
+                <fieldset role="group">
+                    <input disabled type="text" id="current_ip" name="current_ip" value="{{ .CurrentIP }}" aria-invalid="true"/>
+                    <input type="hidden" name="new_ip" value="{{ .CurrentIP }}"/>
+                    <button hx-post="/update-ip" hx-swap="none" hx-vals='{"new_ip": "{{ .CurrentIP }}"}'>Refresh</button>
+                </fieldset>
+                <small id="invalid-helper">Your IP-address is not synced!</small>
+                {{ end }}
+            </article>
+        </div>
+    </div>
+</section>
+{{ end }}

@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="container" style="max-width: 400px; margin: auto;">
+    <h1>Login</h1>
+    <p>Please enter your email address to receive a token.</p>
+    <div id="action-container">
+        <form method="POST" action="/login" hx-post="/login" hx-target="#action-container" id="login-form">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Send Token</button>
+        </form>
+    </div>
+</section>
+{{ end }}
