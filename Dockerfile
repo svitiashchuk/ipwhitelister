@@ -1,17 +1,24 @@
 FROM golang:1.18 as builder
 
-WORKDIR /app
+ARG TARGETOS
+ARG TARGETARCH
 
+WORKDIR /app
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -v -o ipwhitelister
+ENV CGO_ENABLED=1
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
+
+# See https://github.com/mattn/go-sqlite3/blob/master/_example/simple/Dockerfile
+RUN go build \
+    -ldflags='-s -w -extldflags "-static"' \
+    -o ipwhitelister \
+    ./cmd/ipwhitelister
 
 # Docker multi-stage. App image based on distroless for a smaller final image
-FROM gcr.io/distroless/static-debian11
-RUN apk --no-cache add ca-certificates
+FROM gcr.io/distroless/static-debian12 as ipwhitelister
 
-WORKDIR /app/
-
-COPY --from=builder /app/ipwhitelister .
+COPY --from=builder /app/ipwhitelister /app/
 
 CMD ["./ipwhitelister"]
