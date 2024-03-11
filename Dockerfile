@@ -17,8 +17,7 @@ RUN go build \
     ./cmd/ipwhitelister
 
 # Docker multi-stage. App image based on distroless for a smaller final image
-# FROM gcr.io/distroless/static-debian12 as ipwhitelister
-FROM alpine as ipwhitelister
+FROM gcr.io/distroless/static-debian12 as ipwhitelister
 
 COPY --from=builder /app/ipwhitelister /app/
 
