@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  ipwhitelister:
+    image: ipwhitelister:latest
+    command: ["./ipwhitelister"]
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
